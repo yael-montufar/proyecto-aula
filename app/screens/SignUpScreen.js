@@ -2,9 +2,20 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import { 
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  setDoc,
+  doc
+} from "firebase/firestore";
 const auth = getAuth();
+const db = getFirestore();
 
 const SignUpScreen = ({ navigation }) => {
+  const colRef = collection(db, 'alumnos');
+
   const [value, setValue] = React.useState({
     email: '',
     password: '',
@@ -21,7 +32,11 @@ const SignUpScreen = ({ navigation }) => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, value.email, value.password);
+      await createUserWithEmailAndPassword(auth, value.email, value.password).then(response => {
+        setDoc(doc(db, "alumnos", `${response.user.uid}`), {
+          email: response.user.email,
+        })
+      });
       navigation.navigate('Sign In');
     } catch (error) {
       setValue({
