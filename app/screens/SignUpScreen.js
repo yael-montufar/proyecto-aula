@@ -4,9 +4,6 @@ import { TextInput, Button } from 'react-native-paper';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { 
   getFirestore,
-  collection,
-  getDocs,
-  addDoc,
   setDoc,
   doc
 } from "firebase/firestore";
@@ -14,8 +11,6 @@ const auth = getAuth();
 const db = getFirestore();
 
 const SignUpScreen = ({ navigation }) => {
-  const colRef = collection(db, 'alumnos');
-
   const [value, setValue] = React.useState({
     email: '',
     password: '',
