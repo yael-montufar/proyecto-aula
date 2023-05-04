@@ -3,9 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useAuthentication } from '../hooks/useAuthentication';
 import { Button } from 'react-native-paper';
 import { getAuth, signOut } from 'firebase/auth'
-import { 
-  getFirestore,
-} from "firebase/firestore";
+import QRCode from 'react-native-qrcode-svg'
 const auth = getAuth();
 
 export default function HomeScreen({navigation}) {
@@ -14,6 +12,7 @@ export default function HomeScreen({navigation}) {
   return (
     <View style={styles.container}>
       <Text>Welcome {user?.email}!</Text>
+      <QRCode value={`${user?.uid}`}/>
 
       <Button onPress={() => signOut(auth)} style={styles.button}>
         Sign Out
@@ -24,7 +23,7 @@ export default function HomeScreen({navigation}) {
       </Button>
 
       <Button onPress={() => {
-        console.log(user);
+        console.log(user?.uid);
       }} style={styles.button}>
         LOG
       </Button>

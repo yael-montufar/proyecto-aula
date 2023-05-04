@@ -2,6 +2,14 @@ import 'dotenv/config'
 
 export default {
   "expo": {
+    "plugins": [
+      [
+        "expo-barcode-scanner",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access camera."
+        }
+      ]
+    ],
     "name": "ProyectoAula",
     "slug": "ProyectoAula",
     "version": "1.0.0",
