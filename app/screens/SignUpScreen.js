@@ -28,8 +28,9 @@ const SignUpScreen = ({ navigation }) => {
 
     try {
       await createUserWithEmailAndPassword(auth, value.email, value.password).then(response => {
-        setDoc(doc(db, "alumnos", `${response.user.uid}`), {
+        setDoc(doc(db, 'usuarios', `${response.user.uid}`), {
           email: response.user.email,
+          rol: 'alumno',
         })
       });
       navigation.navigate('Sign In');

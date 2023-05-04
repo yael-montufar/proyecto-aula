@@ -20,7 +20,7 @@ export default function ProfileScreen({navigation}) {
   const [userData, setUserData] = React.useState({})
 
   // doc ref for deleting doc
-  const docRef = doc(db, 'alumnos', `${auth.currentUser.uid}`)
+  const docRef = doc(db, 'usuarios', `${auth.currentUser.uid}`)
 
   function updateProfile() {
     updateDoc(docRef, {

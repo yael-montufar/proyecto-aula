@@ -22,6 +22,12 @@ export default function HomeScreen({navigation}) {
       <Button onPress={() => {navigation.navigate('Profile');}} style={styles.button}>
         PROFILE
       </Button>
+
+      <Button onPress={() => {
+        console.log(user);
+      }} style={styles.button}>
+        LOG
+      </Button>
     </View>
   );
 }
