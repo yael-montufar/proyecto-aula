@@ -47,7 +47,7 @@ export default function QRScannerScreen({navigation}) {
 
       <View style={styles.scannerBox}>
         <BarCodeScanner
-        barCodeTypes={'org.iso.QRCode'}
+        barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]}
           style={StyleSheet.absoluteFillObject}
           onBarCodeScanned={scanData ? undefined : handleBarCodeScanned}
         />
