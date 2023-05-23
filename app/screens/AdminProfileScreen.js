@@ -13,8 +13,8 @@ import QRCode from 'react-native-qrcode-svg'
 const auth = getAuth();
 const db = getFirestore();
 
-export default function ProfileScreen({navigation}) {
-  const docRef = doc(db, 'usuarios', `${auth.currentUser.uid}`);
+export default function AdminProfileScreen({route, navigation}) {
+  const docRef = doc(db, 'usuarios', `${route.params.id}`);
 
   const [userData, setUserData] = React.useState(undefined)
   const [day, setDay] = React.useState(undefined)
@@ -44,8 +44,6 @@ export default function ProfileScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      {/* <Text>Welcome {user?.email}!</Text> */}
-      <Text style={{color: 'red'}}>Bienvenido</Text>
       <Text>Alumno: {userData.nombre} {userData.apellido}</Text>
       <Text>Boleta: {userData.boleta}</Text>
       {userData?.grupos &&
@@ -72,7 +70,7 @@ export default function ProfileScreen({navigation}) {
       </>
       }
 
-      <QRCode value={`${auth.currentUser.uid}`}/>
+      <QRCode value={`${route.params.id}`}/>
     </View>
   );
 }
