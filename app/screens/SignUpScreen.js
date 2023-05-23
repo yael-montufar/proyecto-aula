@@ -14,23 +14,38 @@ const SignUpScreen = ({ navigation }) => {
   const [value, setValue] = React.useState({
     email: '',
     password: '',
+
+    nombre: '',
+    apellido: '',
+    boleta: '',
+
     error: ''
   })
 
   async function signUp() {
-    if (value.email === '' || value.password === '') {
+    if (value.email === '' || value.password === '' || value.boleta === '') {
       setValue({
         ...value,
-        error: 'Email and password are mandatory.'
+        error: 'Correo, contraseña y boleta son requiridas.'
       })
       return;
-    }
+    } else if (value.boleta.length != 10) {
+      setValue({
+        ...value,
+        error: 'La boleta debe consistir de 10 digitos.'
+      })
+      return;
+    } 
 
     try {
       await createUserWithEmailAndPassword(auth, value.email, value.password).then(response => {
         setDoc(doc(db, 'usuarios', `${response.user.uid}`), {
           email: response.user.email,
           rol: 'alumno',
+
+          nombre: value.nombre,
+          apellido: value.apellido,
+          boleta: value.boleta,
         })
       });
       navigation.navigate('Sign In');
@@ -50,15 +65,37 @@ const SignUpScreen = ({ navigation }) => {
 
       <View style={styles.controls}>
         <TextInput
-          label={"Email"}
-          placeholder='Introduce tu email'
+          label={"Nombre"}
+          placeholder='nombre'
+          value={value.nombre}
+          onChangeText={(text) => setValue({ ...value, nombre: text })}
+        />
+
+        <TextInput
+          label={"Apellido"}
+          placeholder='apellido'
+          value={value.apellido}
+          onChangeText={(text) => setValue({ ...value, apellido: text })}
+        />
+
+        <TextInput
+          label={"Boleta"}
+          placeholder='boleta'
+          keyboardType='numeric'
+          value={value.boleta}
+          onChangeText={(text) => setValue({ ...value, boleta: text })}
+        />
+
+        <TextInput
+          label={"Correo"}
+          placeholder='correo'
           value={value.email}
           onChangeText={(text) => setValue({ ...value, email: text })}
         />
 
         <TextInput
-          label={"Password"}
-          placeholder='Introduce tu contrasena'
+          label={"Contraseña"}
+          placeholder='contraseña'
           value={value.password}
           onChangeText={(text) => setValue({ ...value, password: text })}
           secureTextEntry={true}
