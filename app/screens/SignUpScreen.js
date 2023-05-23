@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import { 
   getFirestore,
   setDoc,
+  getDoc,
   doc
 } from "firebase/firestore";
 const auth = getAuth();
@@ -21,6 +22,8 @@ const SignUpScreen = ({ navigation }) => {
 
     error: ''
   })
+
+  const [boletaDisponible, setBoletaDisponible] = useState(false)
 
   async function signUp() {
     if (value.email === '' || value.password === '' || value.boleta === '') {
@@ -46,6 +49,10 @@ const SignUpScreen = ({ navigation }) => {
           nombre: value.nombre,
           apellido: value.apellido,
           boleta: value.boleta,
+        })
+
+        setDoc(doc(db, 'boletas', `${value.boleta}`), {
+          uid: response.user.uid
         })
       });
       navigation.navigate('Sign In');
@@ -83,7 +90,20 @@ const SignUpScreen = ({ navigation }) => {
           placeholder='boleta'
           keyboardType='numeric'
           value={value.boleta}
-          onChangeText={(text) => setValue({ ...value, boleta: text })}
+          onChangeText={(text) => {
+            setValue({ ...value, boleta: text })
+
+            const boleta = text;
+
+            if (boleta.length === 10) {
+              const docRef = doc(db, 'boletas', `${boleta}`);
+              // const { exists } = await docRef.get();
+              getDoc(docRef).then(doc => {
+                console.log(doc.exists())
+                setBoletaDisponible(doc.exists())
+              })
+            } 
+          }}
         />
 
         <TextInput
@@ -101,9 +121,13 @@ const SignUpScreen = ({ navigation }) => {
           secureTextEntry={true}
         />
 
-        <Button mode='contained' onPress={signUp}>
+        <Button mode='contained' disabled={value.boleta.length === 10 && boletaDisponible} onPress={signUp}>
           Sign up
         </Button>
+
+        {value.boleta.length === 10 &&
+          <Text>{!boletaDisponible ? 'disponible': 'boleta ya existe en la base de datos'}</Text>
+        }
       </View>
     </View>
   );
